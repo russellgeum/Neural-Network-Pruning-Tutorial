@@ -21,11 +21,11 @@ print(net.weight.shape)
 ==> torch.Size([2, 3, 3, 3])
 ```
 ## Exploring of CNN, DNN weights
+```
 모델 인스턴스의 내부 레이어에 접근해봅시다.  
 module.weight에 접근하여 shape를 찍으면 [out_channel = 4, in_channel = 3, height = 3, width = 3]  
 module.parameters()는 weight, bias에 해당하는 값만 출력  
 module.named_paramters()는 각 파라미터와 weight, bias Key가 같이 출력  
-```
 module.paramters()에 접근하면 requires_grad = True인 weight와 bias가 출력
 print(list(module.parameters()))
 
@@ -58,10 +58,11 @@ tensor([[[[ 0.0589,  0.1299, -0.0005],
 Parameter containing:
 tensor([ 0.1234, -0.1730], requires_grad=True)]
 
+
 module.named_parameters()에 접근하면 requires_grad = True인  
 weight와 bias가 각각에 해당하는 "weight", "bias"가 키 값으로 함께 출력  
-print(list(module.named_parameters()))
 
+print(list(module.named_parameters()))
 ==>
 [('weight', Parameter containing:
 tensor([[[[ 0.0589,  0.1299, -0.0005],
@@ -92,15 +93,15 @@ tensor([[[[ 0.0589,  0.1299, -0.0005],
 tensor([ 0.1234, -0.1730], requires_grad=True))]
 ```
 # torch.prune.random_unstructured()
+```
 위의 모듈을 random_unstructured에 삽입하고  
 어떤 파라미터를 프루닝할껀지? (name) 얼마나 프루닝할껀지? (amount) 설정 가능  
 아래의 출력을 보면 직접 parameter에 접근하여 프루닝하지는 않으나,  
 원래 parameter 정보가 orig가 붙은 키 값으로 변경   
-```
+
 prune.random_unstructured(module, name = "weight", amount = 0.5)
 prune.random_unstructured(module, name = "bias", amount = 0.5)
 print(list(module.named_parameters()))
-
 ==>
 [('weight_orig', Parameter containing:
 tensor([[[[ 0.0589,  0.1299, -0.0005],
@@ -130,12 +131,11 @@ tensor([[[[ 0.0589,  0.1299, -0.0005],
 ('bias_orig', Parameter containing:
 tensor([ 0.1234, -0.1730], requires_grad=True))]
 ```
----
+```
 toch.prune 모듈은 parameter에 직접적으로 pruning하지 않는다.  
 module.named_buffers()에 어떤 parameter를 pruning할지 binary mask 정보로 버퍼에 저장  
-```
-print(list(module.named_buffers()))
 
+print(list(module.named_buffers()))
 ==>
 [('weight_mask', 
 tensor([[[[0., 0., 1.],
@@ -165,14 +165,13 @@ tensor([[[[0., 0., 1.],
 ('bias_mask', 
 tensor([0., 1.]))]
 ```
----
+```
 forward시에 작동하는 weight를 살펴봅시다.
 print(moudle.weight)에는 module.paramters()에 module.buffers()가 적용되어 (elementwise product)
 프루닝돈 것을 확인 가능
-```
+
 print(module.weight)
 print(module.bias)
-
 ==>
 tensor([[[[ 0.0000,  0.0000, -0.0005],
           [-0.1727,  0.1506,  0.0735],
@@ -200,9 +199,9 @@ tensor([[[[ 0.0000,  0.0000, -0.0005],
           [-0.0000,  0.0000, -0.0901]]]], grad_fn=<MulBackward0>)
 tensor([ 0.0000, -0.1730], grad_fn=<MulBackward0>)
 ```
----
-print(module._forward_pre_hooks)을 통해서 레이어에 걸린 hooks가 prune 모듈임을 확인
 ```
+print(module._forward_pre_hooks)을 통해서 레이어에 걸린 hooks가 prune 모듈임을 확인
+
 print(module._forward_pre_hooks)
 ==> OrderedDict([(68, <torch.nn.utils.prune.RandomUnstructured object at 0x7f2b66321278>) ~~
 ```
