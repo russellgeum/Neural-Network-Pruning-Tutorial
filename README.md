@@ -8,8 +8,9 @@
 - [Structured DropConnect for Convolutional Neural Networks](http://www.cs.toronto.edu/~sajadn/sajad_norouzi/ECE1512.pdf)
   
 뉴럴 네트워크 프루닝에는 몇 가지 관점이 있습니다.  
-> Unstructured Pruning or structured Pruning???  
-> One-shot Pruning or Iterative Pruning???  
+> Unstructured Pruning??? or structured Pruning???  
+  
+> One-shot Pruning??? or Iterative Pruning???  
   
 1. Unsturctured Pruning  
   parameter 구조를 유지하면서, criteria에 따라 불필요한 weight는 0으로 만들어서 sparsity하게 만듭니다.  
