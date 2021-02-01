@@ -87,6 +87,7 @@ python model_train.py --model vgg16
 ## Define simply convolution module
 ```
 필요한 모듈들을 import하고 pruning을 적용해보기 위한 cnn 인스턴스 생성
+
 import torch
 from torch import nn
 import torch.nn.functional as F
