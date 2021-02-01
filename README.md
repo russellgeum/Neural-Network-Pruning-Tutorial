@@ -11,11 +11,11 @@
 > Unstructured Pruning or structured Pruning???  
 > One-shot Pruning or Iterative Pruning???  
   
-1. Unsturctured Pruning
+1. Unsturctured Pruning  
   parameter 구조를 유지하면서, criteria에 따라 불필요한 weight는 0으로 만들어서 sparsity하게 만듭니다.  
-2. Structured Pruning
-  parameter 구조 자체로 변형할 수 있습니다.
-  criteria에 따라 불필요한 weight는 0으로 만드는데, 직접 구조적인 맥락까지 바꿀 수 있는 방법입니다. 
+2. Structured Pruning  
+  parameter 구조 자체로 변형할 수 있습니다.  
+  criteria에 따라 불필요한 weight는 0으로 만드는데, 직접 구조적인 맥락까지 바꿀 수 있는 방법입니다.  
 3. One shot Pruning  
   네트워크를 한 번에 불필요한 weight를 빼서 프루닝하는 방법  
 4. Iterative Pruning  
