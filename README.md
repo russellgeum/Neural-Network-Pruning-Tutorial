@@ -1,39 +1,42 @@
 # Pruning Starter for Beginner
-프루닝 초보자를 위한 튜토리얼 안내서  
-- [An Overview of Neural Network Compression](https://arxiv.org/abs/2006.03669)  
+뉴럴 네트워크 프루닝 초보자를 위한 아주 간편한 튜토리얼  
 - [Pytorch Pruning Tutorial](https://pytorch.org/tutorials/intermediate/pruning_tutorial.html)  
-네트워크 프루닝에는 크게 두 가지 맥락이 있습니다.  
+- [An Overview of Neural Network Compression](https://arxiv.org/abs/2006.03669)  
+- [Structured DropConnect for Convolutional Neural Networks](http://www.cs.toronto.edu/~sajadn/sajad_norouzi/ECE1512.pdf)
+
+뉴럴 네트워크 프루닝에는 크게 두 가지 맥락이 있습니다.  
 Unstructured Pruning, structured Pruning  
-```
-Unsturctured Pruning:
-parameter 구조를 유지하면서, criteria에 따라 불필요한 weight는 0으로 만들어서 sparsity하게 만듬. 
-Structured Pruning:
-parameter 구조 자체로 변형할 수 있습니다. criteria에 따라 불필요한 weight는 0으로 만드는데,
-직접 구조적인 맥락까지 변경할 수 있는 방법입니다.
+1. Unsturctured Pruning
+  parameter 구조를 유지하면서, criteria에 따라 불필요한 weight는 0으로 만들어서 sparsity하게 만듭니다.  
+2. Structured Pruning
+  parameter 구조 자체로 변형할 수 있습니다.
+  criteria에 따라 불필요한 weight는 0으로 만드는데,
+  직접 구조적인 맥락까지 바꿀 수 있는 방법입니다.
 
 Dropout, DropBlock, DropBlock같은 다양한 regularization 방법이 있습니다.
 이 기법들은 training 시에 네트워크 구조에 sparsity한 성질을 부여하기 때문에
 Iterative Pruning한 방법에 응용할 수 있습니다.
 
-One shot Pruning:
-네트워크를 한 번에 불필요한 weight를 빼서 프루닝하는 방법
-Iterative Pruning:
-네트워크를 조금씩 aggressive하게 프루닝하는 방법 (점진적으로)
-```
+1. One shot Pruning  
+  네트워크를 한 번에 불필요한 weight를 빼서 프루닝하는 방법
+2. Iterative Pruning  
+  네트워크를 조금씩 aggressive하게 프루닝하는 방법 (점진적으로)
+  
+  
 # Summary of torch.prune module
 ## Define simply convolution module
 ```
+필요한 모듈들을 import하고 pruning을 적용해보기 위한 cnn 인스턴스 생성
 import torch
 from torch import nn
 import torch.nn.functional as F
 import torch.nn.utils.prune as prune
 
 net = nn.Conv2d(in_channels = 3, out_channels = 2, kernel_size = (3, 3), stride = 1, padding = 1)
-
 print(net.weight.shape)
-==> torch.Size([2, 3, 3, 3])
+torch.Size([2, 3, 3, 3])
 ```
-## Exploring of CNN, DNN weights
+## Exploring of CNN weights
 ```
 모델 인스턴스의 내부 레이어에 접근해봅시다.  
 module.weight에 접근하여 shape를 찍으면, [out_channel = 4, in_channel = 3, height = 3, width = 3]  
@@ -53,21 +56,7 @@ tensor([[[[ 0.1888, -0.0723, -0.0635],
          [[-0.0716, -0.0330, -0.1025],
           [-0.1708, -0.1073,  0.0821],
           [ 0.1588,  0.0013, -0.0586]]],
-
-
-        [[[ 0.0785, -0.1809,  0.0158],
-          [-0.0923, -0.0121,  0.0697],
-          [ 0.1339,  0.1373, -0.0528]],
-
-         [[-0.1755,  0.1867,  0.0342],
-          [ 0.1643, -0.0684, -0.0287],
-          [-0.1600, -0.1110,  0.1027]],
-
-         [[ 0.0119, -0.1053,  0.0603],
-          [ 0.1612, -0.0757,  0.0062],
-          [-0.1853,  0.1562,  0.1103]]]], requires_grad=True),
- Parameter containing:
-tensor([ 0.0260, -0.1161], requires_grad=True)]
+          ... ...
 
 print(list(module.named_parameters()))
 [('weight',
@@ -83,28 +72,14 @@ tensor([[[[ 0.1888, -0.0723, -0.0635],
          [[-0.0716, -0.0330, -0.1025],
           [-0.1708, -0.1073,  0.0821],
           [ 0.1588,  0.0013, -0.0586]]],
-
-
-        [[[ 0.0785, -0.1809,  0.0158],
-          [-0.0923, -0.0121,  0.0697],
-          [ 0.1339,  0.1373, -0.0528]],
-
-         [[-0.1755,  0.1867,  0.0342],
-          [ 0.1643, -0.0684, -0.0287],
-          [-0.1600, -0.1110,  0.1027]],
-
-         [[ 0.0119, -0.1053,  0.0603],
-          [ 0.1612, -0.0757,  0.0062],
-          [-0.1853,  0.1562,  0.1103]]]], requires_grad=True)),
- ('bias', Parameter containing:
-tensor([ 0.0260, -0.1161], requires_grad=True))]
+          ... ...
 ```
 ## torch.prune.random_unstructured()
 ```
-위의 모듈을 random_unstructured에 삽입하고,
-어떤 파라미터를 프루닝할껀지? (name) 얼마나 프루닝할껀지? (amount) 설정 가능  
+위의 모듈을 torch.random_unstructured에 arg로 삽입하고,
+어떤 파라미터를 프루닝할껀지? (name) 얼마나 프루닝할껀지? (amount) 설정할 수 있습니다.
 아래의 출력을 보면 직접 parameter에 접근하여 프루닝하지는 않으나,  
-원래 parameter 정보가 orig가 붙은 키 값으로 변경   
+원래 parameter 정보가 orig가 붙은 키 값으로 변경됩니다.
 
 prune.random_unstructured(module, name = "weight", amount = 0.5)
 prune.random_unstructured(module, name = "bias", amount = 0.5)
@@ -138,8 +113,8 @@ tensor([[[[ 0.1888, -0.0723, -0.0635],
  ('bias_orig',
   Parameter containing:
 tensor([ 0.0260, -0.1161], requires_grad=True))]
-```
-```
+
+
 toch.prune 모듈은 parameter에 직접적 pruning하지 않는다.  
 module.named_buffers()에 어떤 parameter를 pruning할지 binary 정보로 buffer에 저장  
 
@@ -175,6 +150,7 @@ print(list(module.named_buffers()))
 forward시에 작동하는 weight를 살펴봅시다.
 print(moudle.weight)에는 module.paramters()에 module.buffers()가 적용되어
 elementwise product 형태로 pruning한 param을 출력하는 것을 확인 가능
+(buffer에 저장된 binary mask에서 True 위치에 해당하는 parameter가 살아있는 것을 확인해보세요.)
 
 print(module.weight)
 print(module.bias)
@@ -203,14 +179,14 @@ tensor([[[[ 0.1888, -0.0723, -0.0000],
           [ 0.1612, -0.0757,  0.0000],
           [-0.1853,  0.0000,  0.1103]]]], grad_fn=<MulBackward0>)
 tensor([0.0260, -0.0000], grad_fn=<MulBackward0>)
-```
-```
+
+
 module._forward_pre_hooks을 통해서 레이어에 걸린 hooks가 prune 모듈임을 확인s
 print(module._forward_pre_hooks)
 OrderedDict([(86,
-              <torch.nn.utils.prune.RandomUnstructured object at 0x7f2b661e72b0>),
-             (87,
-              <torch.nn.utils.prune.RandomUnstructured object at 0x7f2b661e7400>)])
+            <torch.nn.utils.prune.RandomUnstructured object at 0x7f2b661e72b0>),
+            (87,
+            <torch.nn.utils.prune.RandomUnstructured object at 0x7f2b661e7400>)])
 ```
 ## torch.prune.ln_structured()
 ```
@@ -250,12 +226,14 @@ tensor([[[[-0.0000, -0.0000, -0.0000],
 
 
 Structured pruning을 더 작은 레이어에 이식하는 방법
+이때 중요한 것은 old_module의 parameter matrix에서 살아남은 parameter들의 tensor index를 알아내고
+index 정보로 값을 clone()하여 small_module에 이식해야합니다.
 
 Ex 2)
-samll_module = nn.Conv2d(3, 1, (3, 3), 1, 1)
-samll_module.weight.data = module.weight.data[1].clone()
+small_module = nn.Conv2d(3, 1, (3, 3), 1, 1)
+small_module.weight.data = module.weight.data[1].clone()
 
-print(samll_module.weight)
+print(small_module.weight)
 Parameter containing:
 tensor([[[ 0.0594, -0.1061, -0.0484],
          [-0.1637,  0.1138, -0.1382],
@@ -269,7 +247,8 @@ tensor([[[ 0.0594, -0.1061, -0.0484],
          [ 0.1746,  0.0898,  0.1587],
          [ 0.0955,  0.0040,  0.1554]]], requires_grad=True)
 ```
-# This repository...
+# Pruninf Prosses of Repository (for VGG model)
+이 레포지토리에서는 VGG 모델만을 위한 훈련 및 저장 -> 로드 후 프루닝 -> 재훈련 및 저장의 과정을 제공합니다.  
 ## Directory
 ```
 ./folder
