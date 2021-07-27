@@ -27,6 +27,7 @@ import torchvision.transforms as transforms
 device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 
 
+
 class INFERENCE:
       def __init__ (self, args, device):
             self.args   = args

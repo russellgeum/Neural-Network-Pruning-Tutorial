@@ -27,6 +27,7 @@ import torchvision.transforms as transforms
 device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 
 
+
 class TRANING (object):
     def __init__ (self, args, device):
         self.args          = args
@@ -72,6 +73,7 @@ class TRANING (object):
         self.criterion = torch.nn.CrossEntropyLoss()
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size = self.args.step, gamma = 0.1)
 
+
     def model_train (self, inputs, outputs, model):
         model.train()
         self.optimizer.zero_grad()
@@ -82,8 +84,8 @@ class TRANING (object):
         self.optimizer.step()
         is_correct = torch.argmax(pred, 1) == outputs
         batch_acc  = is_correct.float().mean()
-
         return loss, batch_acc
+
 
     def model_test (self, inputs, outputs, model):
         model.eval()
@@ -92,14 +94,10 @@ class TRANING (object):
         loss       = self.criterion(pred, outputs)
         is_correct = torch.argmax(pred, 1) == outputs
         batch_acc  = is_correct.float().mean()
-
         return loss, batch_acc
 
-    def loop(self):
-        # if self.args.opt == "none":
-        #     print("TRAINING OPTION  :", self.args.opt)
-        #     pass
 
+    def loop(self):
         'Loop per epoch'
         for epo in tqdm(range (self.args.epoch)):
             train_losses   = 0
@@ -136,18 +134,19 @@ class TRANING (object):
             #     self.best_accuracy = test_accuracy
             self.scheduler.step()
 
+
     def model_save (self):
         if self.args.ver   == "original":
             torch.save(self.model.state_dict(), "./save/" + str(self.args.data) + "/" + "{:03d}".format(self.args.epoch) + ".pt")
         elif self.args.ver == "pruned":
             torch.save(self.model.state_dict(), "./save/prune/" + "retrained_" + str(self.args.model) + ".pt")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Train Option')
     parser.add_argument("--model", type = str,   default = "vgg16",     help = "deep learning model name")
     parser.add_argument("--data",  type = str,   default = "cifar10",   help = "CFIAR10 or CIFAR100")
     parser.add_argument("--load",  type = str,   default = "none",      help = "load file path")
-    # parser.add_argument("--opt",   type = str,   default = "none",      help = "dropout option : dropout2d, dropblock2d")
     parser.add_argument("--epoch", type = int,   default = 300,         help = "training epoch")
     parser.add_argument("--batch", type = int,   default = 256,         help = "batch size")
     parser.add_argument("--optim", type = str,   default = "sgd",       help = "optimize")
@@ -155,7 +154,7 @@ if __name__ == "__main__":
     parser.add_argument("--step",  type = int,   default = 100,         help = "learnig rate scheduler step")
     parser.add_argument("--size",  type = int,   default = 32,          help = "image size")
     parser.add_argument("--ver",   type = str,   default = "original",  help = "original or pruned")
-    parser.add_argument("--ar",    type = float, default = 0.01,         help = "0.01 ~ 0.99")
+    parser.add_argument("--ar",    type = float, default = 0.01,        help = "0.01 ~ 0.99")
     args = parser.parse_args()
 
     'SEED, MODEL.DEVICE(OPTION)'

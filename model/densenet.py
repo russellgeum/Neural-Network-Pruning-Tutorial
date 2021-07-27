@@ -4,7 +4,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
-from .dropout import *
+
 
 
 class Bottleneck(nn.Module):
@@ -27,6 +27,7 @@ class Bottleneck(nn.Module):
         return out
 
 
+
 class Transition(nn.Module):
     def __init__(self, in_planes, out_planes):
         super(Transition, self).__init__()
@@ -40,6 +41,7 @@ class Transition(nn.Module):
         out = F.avg_pool2d(out, 2)
 
         return out
+
 
 
 class DenseNet(nn.Module):
@@ -97,11 +99,14 @@ class DenseNet(nn.Module):
 def DenseNet121(growth_rate = 32):
     return DenseNet(Bottleneck, [6, 12, 24, 16], growth_rate = growth_rate)
 
+
 def DenseNet169(growth_rate = 32):
     return DenseNet(Bottleneck, [6, 12, 32, 32], growth_rate = growth_rate)
 
+
 def DenseNet201(growth_rate = 32):
     return DenseNet(Bottleneck, [6, 12, 48, 32], growth_rate = growth_rate)
+
 
 def DenseNet161(growth_rate = 32):
     return DenseNet(Bottleneck, [6, 12, 36, 24], growth_rate = growth_rate)

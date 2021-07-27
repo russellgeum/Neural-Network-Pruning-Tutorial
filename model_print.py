@@ -28,6 +28,7 @@ import torchvision.transforms as transforms
 device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Train Option')
     parser.add_argument("--model", type = str,  default = "vgg16",  help = "deep learning model name")

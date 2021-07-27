@@ -9,7 +9,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
-from .dropout import *
+
 
 
 class Block(nn.Module):
@@ -38,6 +38,7 @@ class Block(nn.Module):
         out = self.bn3(self.conv3(out))
         out = out + self.shortcut(x) if self.stride==1 else out
         return out
+
 
 
 class mobilenetv2 (nn.Module):
@@ -80,8 +81,7 @@ class mobilenetv2 (nn.Module):
         return out
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 class LinearBottleNeck(nn.Module):
 
     def __init__(self, in_channels, out_channels, stride, t=6, num_classes=100):
@@ -108,6 +108,7 @@ class LinearBottleNeck(nn.Module):
             residual += x
 
         return residual
+
 
 
 class MobileNetV2(nn.Module):

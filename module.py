@@ -196,6 +196,7 @@ def call_model(model_name, num_classes, load_path, device):
 
     return model
 
+
 'MODEL INFERENCE'
 def inference (model, data_loader):
     accuracy = 0

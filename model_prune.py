@@ -26,68 +26,6 @@ from torchvision.datasets import ImageNet
 import torchvision.transforms as transforms
 device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu')
 
-# def montecarlo_pruning(new_model, old_model):
-#     LIMIT_STATIC_NUMBER = 200
-#     LOWER_BOUND_RATIO   = 0.97
-#     layer_count_number  = 0
-#     static_count_number = 0
-#     prev_index = channel_random_pruning(old_model, 1 - alive_ratio)
-
-#     for count in range (100000):
-#         # print(count, layer_count_number)
-#         print(layer_count_number)
-#         '1. Prev accuracy new_model'
-#         old_model     = call_model(args.model, args.opt, 0.0, 1.0, args.load)
-#         oldmodel2newmodel(new_model.to(device), old_model.to(device), prev_index)
-#         prev_result   = inference(new_model.to(device), test_loader)
-#         remeber_model = copy.deepcopy(new_model)
-
-#         '2. Get preserved current channel_index (From the front layer) //  After accuracy new_model'
-#         old_model                       = call_model(args.model, args.opt, 0.0, 1.0, args.load)
-#         next_index                      = channel_random_pruning(old_model, 1 - alive_ratio)
-#         next_index[:layer_count_number] = prev_index[:layer_count_number] # Implantation current_index from prev_index[count] to weight_index2[count]
-#         oldmodel2newmodel(new_model.to(device), old_model.to(device), next_index)
-#         next_result                     = inference(new_model.to(device), test_loader)
-
-#         '''
-#         3. Print prev accruacy and next accuracy
-#         if next accuracy higher than prev accuracy, 
-#         layer index state of prev accuracy model would be replaced to layer index state of next accuracy
-#         '''
-#         print_accuracy(prev_result)
-#         print_accuracy(next_result)
-
-#         if prev_result.item() < next_result.item():
-#             prev_index = next_index
-#             next_index = []
-#             layer_count_number = layer_count_number + 1
-#             static_count_number = 0
-#         elif LOWER_BOUND_RATIO * prev_result.item() < next_result.item() and next_result.item() <= prev_result.item():
-#             prev_index = next_index
-#             next_index = []
-#             static_count_number = 0
-#             pass
-#         elif next_result.item() < prev_result.item():
-#             static_count_number = static_count_number + 1
-#             if LIMIT_STATIC_NUMBER < static_count_number:
-#                 if LOWER_BOUND_RATIO * LOWER_BOUND_RATIO * prev_result.item() < next_result.item():
-#                     prev_index = next_index
-#                     next_index = []
-#                     layer_count_number = layer_count_number + 1
-#                     static_count_number = 0
-#                 else:
-#                     static_count_number = static_count_number + 1
-#             pass 
-
-#         if layer_count_number == 13:
-#             print("EXIT MONTE CARLO SEARCH FOR GOOD PRUNING ARCHITECTURE")
-#             new_model = copy.deepcopy(remeber_model)
-#             return new_model
-#             break
-
-#     new_model = copy.deepcopy(remeber_model)
-#     return new_model
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Mapping fuction for VGG13, 16, scale
@@ -192,6 +130,7 @@ def oldmodel2newmodel (new_model, old_model, alive_weight_index):
             new_module.running_var   = old_module.running_var.clone()
 
 
+
 if __name__ == "__main__":
     from pprint import pprint
     parser = argparse.ArgumentParser(description = 'TEST')
@@ -201,7 +140,6 @@ if __name__ == "__main__":
     parser.add_argument("--ar",   type = float, default = 0.0,       help = "prune ratio")
     parser.add_argument("--po",   type = str,   default = "l1",      help = "prune option")
     args = parser.parse_args()
-
     alive_ratio = alive_ratio_mapping(args.ar)
     print(alive_ratio)
 
