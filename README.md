@@ -40,7 +40,6 @@ model_test.py
 module.py
 ```
 ## Usage
-1.  
 모델을 스크래치로 학습하고 가중치 저장  
 (학습이 다 끝나면 ./save/--data 폴더에 가중치 저장)
 ```
@@ -57,14 +56,13 @@ python model_train.py
   --ver original (original 시에는 --ar args 무시)
 
 ```
-2.  
 모델을 프루닝하고, 작은 모델에 이식하여 저장  
 (프루닝이 다 끝나면 ./save/prune 폴더에 프루닝한 모델 가중치 저장)  
 ```
 python model_prune.py --model vgg16 --data cifar10 --load ./save/cifar10/vgg16_300.pt --ar 0.5 --po l1
 ```
-3.  
 프루닝 모델을 재로드하여 retraining  
+(pruned 시에 작동, 2.에서 입력한 --ar 정보와 일치해야함)  
 ```
 python model_train.py 
   --model vgg16 
@@ -77,5 +75,5 @@ python model_train.py
   --step 300
   --size 32
   --ver pruned
-  --ar 0.5 (pruned 시에 작동, 2.에서 입력한 --ar 정보와 일치해야함)
+  --ar 0.5
 ```
