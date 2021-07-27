@@ -23,7 +23,7 @@ Regularization과 Pruning은 신경망이 Sparsity를 학습한다는 점에서 
 몇 가지 관련한 논문  
 - [Learning Sparse Networks Using Targeted Dropout](https://arxiv.org/pdf/1905.13678.pdf)  
 - [Reducing Transformer Depth on Demand With Structured Dropout](https://arxiv.org/abs/1909.11556)  
-# Pruning process of this repo (for VGG model)
+# Pruning process of this repo (for VGG)
 이 레포는 VGG 모델 훈련 및 저장 -> 프루닝 -> 재훈련 및 저장의 과정을 제공합니다.  
 ## Directory
 ```
