@@ -1,4 +1,4 @@
-# Pruning Starter for Beginner
+# Pruning for beginner
 뉴럴 네트워크 프루닝 초보자를 위한 아주 간편한 튜토리얼  
 - [Pytorch Pruning Tutorial](https://pytorch.org/tutorials/intermediate/pruning_tutorial.html)  
 - [What is the State of Neural Network Pruning?](https://arxiv.org/abs/2003.03033)
@@ -21,10 +21,10 @@
 신경망에는 Dropout, DropBlock, DropBlock같은 다양한 regularization 방법이 있습니다.  
 Regularization과 Pruning은 신경망이 Sparsity를 학습한다는 점에서 공통된 맥락이 있습니다.  
 몇 가지 관련한 논문  
-- [Learning Sparse Networks Using Targeted Dropout](https://arxiv.org/pdf/1905.13678.pdf)
-- [Reducing Transformer Depth on Demand With Structured Dropout](https://arxiv.org/abs/1909.11556)
-# Pruninf Prosses of Repository (for VGG model)
-이 레포지토리에서는 VGG 모델만을 위한 훈련 및 저장 -> 로드 후 프루닝 -> 재훈련 및 저장의 과정을 제공합니다.  
+- [Learning Sparse Networks Using Targeted Dropout](https://arxiv.org/pdf/1905.13678.pdf)  
+- [Reducing Transformer Depth on Demand With Structured Dropout](https://arxiv.org/abs/1909.11556)  
+# Pruning process of this repo (for VGG model)
+이 레포는 VGG 모델 훈련 및 저장 -> 프루닝 -> 재훈련 및 저장의 과정을 제공합니다.  
 ## Directory
 ```
 ./folder
@@ -40,8 +40,9 @@ model_test.py
 module.py
 ```
 ## Usage
-1. 모델을 스크래치로 학습하고 가중치 저장
-   -> 학습이 다 끝나면 ./save/--data 폴더에 가중치 저장
+1.  
+모델을 스크래치로 학습하고 가중치 저장  
+(학습이 다 끝나면 ./save/--data 폴더에 가중치 저장)
 ```
 python model_train.py
   --model vgg16 
@@ -56,12 +57,14 @@ python model_train.py
   --ver original (original 시에는 --ar args 무시)
 
 ```
-2. 모델을 프루닝하고, 작은 모델에 이식하여 저장
-   (프루닝이 다 끝나면 ./save/prune 폴더에 프루닝한 모델 가중치 저장)
+2.  
+모델을 프루닝하고, 작은 모델에 이식하여 저장  
+(프루닝이 다 끝나면 ./save/prune 폴더에 프루닝한 모델 가중치 저장)  
 ```
 python model_prune.py --model vgg16 --data cifar10 --load ./save/cifar10/vgg16_300.pt --ar 0.5 --po l1
 ```
-3. 프루닝 모델을 재로드하여 retraining
+3.  
+프루닝 모델을 재로드하여 retraining  
 ```
 python model_train.py 
   --model vgg16 
