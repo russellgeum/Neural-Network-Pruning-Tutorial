@@ -9,10 +9,10 @@
   
 뉴럴 네트워크 프루닝에는 몇 가지 관점이 있습니다.  
 1. Unsturctured Pruning  
-  parameter 구조를 유지하면서, criteria에 따라 불필요한 weight는 0으로 만들어 sparse matrix를 만듭니다.  
+  모델 구조를 유지하면서, criteria에 따라 불필요한 weight는 0으로 만들어 sparse tensor를 만듭니다.  
 2. Structured Pruning  
   모델 구조 자체를 변형할 수 있습니다.  
-  CNN 모델에서 channel 단위로 프루닝하여, 직접 구조적인 맥락까지 바꿀 수 있는 방법입니다.  
+  주로 CNN 모델에서는 channel 단위로 프루닝하여, 직접 구조적인 맥락까지 바꿀 수 있는 방법입니다.  
 3. One shot Pruning  
   한 번에 불필요한 weight를 제거하는 방법  
 4. Iterative Pruning  
