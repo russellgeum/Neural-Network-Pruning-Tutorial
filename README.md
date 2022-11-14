@@ -14,9 +14,9 @@
   모델 구조 자체를 변형할 수 있습니다.  
   주로 CNN 모델에서는 channel 단위로 프루닝하여, 직접 구조적인 맥락까지 바꿀 수 있는 방법입니다.  
 3. One shot Pruning  
-  한 번에 불필요한 weight를 제거하는 방법  
+  한 번에 불필요한 weight를 제거하고, 재학습을 합니다.
 4. Iterative Pruning  
-  iterative하게 프루닝하는 방법    
+  iterative하게 프루닝을 하면서 모델의 학습을 번갈아 수행합니다.    
   
 신경망에는 Dropout, DropBlock, DropBlock같은 다양한 regularization 방법이 있습니다.  
 Regularization과 Pruning은 신경망이 Sparsity를 학습한다는 점에서 공통된 맥락이 있습니다.  
